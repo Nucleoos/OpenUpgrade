@@ -14,6 +14,9 @@ procurement  / stock.warehouse.orderpoint / warehouse_id (many2one)       : modu
 procurement  / stock.warehouse.orderpoint / procurement_id (many2one)     : DEL relation: procurement.order
 # nothing to do (except take care of xmlids)
 # 
+procurement  / product.product          / orderpoint_ids (one2many)     : module is now 'stock' ('procurement')
+# nothing to do (except take care of xmlids)
+# 
 
 procurement  / mrp.property             / composition (selection)       : module is now 'mrp' ('procurement')
 procurement  / mrp.property             / description (text)            : module is now 'mrp' ('procurement')
@@ -31,15 +34,32 @@ procurement  / procurement.group        / procurement_ids (one2many)    : NEW re
 
 procurement  / procurement.order        / close_move (boolean)          : DEL 
 procurement  / procurement.order        / date_close (datetime)         : DEL 
+# nothing to do
+
 procurement  / procurement.order        / group_id (many2one)           : NEW relation: procurement.group
+# optional relation -> nothing to do
+
 procurement  / procurement.order        / location_id (many2one)        : module is now 'stock' ('procurement')
+# nothing to do
+
 procurement  / procurement.order        / message (char)                : DEL 
+# TODO: convert to a mail message? maybe not for DONE procurements
 procurement  / procurement.order        / message_last_post (datetime)  : NEW 
+# OK: handled with openupgrade_80 helper
+
+
 procurement  / procurement.order        / move_id (many2one)            : DEL relation: stock.move
+# nothing to do
+
 procurement  / procurement.order        / note (text)                   : DEL 
+# TODO: convert to message. maybe not for DONE procurements
+
 procurement  / procurement.order        / procure_method (selection)    : DEL required: required, selection_keys: ['make_to_order', 'make_to_stock'], req_default: make_to_order
 procurement  / procurement.order        / rule_id (many2one)            : NEW relation: procurement.rule
+# TODO : replace procure_method with a procurement rule
+
 procurement  / procurement.order        / state (selection)             : selection_keys is now '['cancel', 'confirmed', 'done', 'exception', 'running']' ('['cancel', 'confirmed', 'done', 'draft', 'exception', 'ready', 'running', 'waiting']')
+# nothing to do
 
 procurement  / procurement.rule         / action (selection)            : NEW required: required, selection_keys: function
 procurement  / procurement.rule         / active (boolean)              : NEW 
@@ -48,16 +68,21 @@ procurement  / procurement.rule         / group_id (many2one)           : NEW re
 procurement  / procurement.rule         / group_propagation_option (selection): NEW selection_keys: ['fixed', 'none', 'propagate']
 procurement  / procurement.rule         / name (char)                   : NEW required: required
 procurement  / procurement.rule         / sequence (integer)            : NEW 
+# nothing to do
 
-procurement  / product.product          / orderpoint_ids (one2many)     : module is now 'stock' ('procurement')
 
 procurement  / product.template         / procure_method (selection)    : DEL required: required, selection_keys: ['make_to_order', 'make_to_stock'], req_default: make_to_stock
 procurement  / product.template         / supply_method (selection)     : DEL required: required, selection_keys: ['buy', 'produce'], req_default: buy
+# TODO check this
+
 procurement  / product.template         / type (False)                  : module is now 'stock' ('procurement')
+# nothing to do
 
 procurement  / res.company              / schedule_range (float)        : DEL required: required, req_default: 730.0
+# TODO check this
 
 procurement  / stock.move               / procurements (one2many)       : DEL relation: procurement.order
+# TODO check this
 
 ---XML records in module 'procurement'---
 DEL ir.model.access: procurement.access_stock_warehouse_orderpoint
