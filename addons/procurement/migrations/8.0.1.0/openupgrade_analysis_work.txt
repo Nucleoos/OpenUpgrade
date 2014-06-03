@@ -1,13 +1,34 @@
 ---Fields in module 'procurement'---
+procurement  / stock.warehouse.orderpoint / active (boolean)              : module is now 'stock' ('procurement')
+procurement  / stock.warehouse.orderpoint / company_id (many2one)         : module is now 'stock' ('procurement')
+procurement  / stock.warehouse.orderpoint / location_id (many2one)        : module is now 'stock' ('procurement')
+procurement  / stock.warehouse.orderpoint / logic (selection)             : module is now 'stock' ('procurement')
+procurement  / stock.warehouse.orderpoint / name (char)                   : module is now 'stock' ('procurement')
+procurement  / stock.warehouse.orderpoint / product_id (many2one)         : module is now 'stock' ('procurement')
+procurement  / stock.warehouse.orderpoint / product_max_qty (float)       : module is now 'stock' ('procurement')
+procurement  / stock.warehouse.orderpoint / product_min_qty (float)       : module is now 'stock' ('procurement')
+procurement  / stock.warehouse.orderpoint / product_uom (many2one)        : module is now 'stock' ('procurement')
+procurement  / stock.warehouse.orderpoint / product_uom (many2one)        : now a function
+procurement  / stock.warehouse.orderpoint / qty_multiple (integer)        : module is now 'stock' ('procurement')
+procurement  / stock.warehouse.orderpoint / warehouse_id (many2one)       : module is now 'stock' ('procurement')
+procurement  / stock.warehouse.orderpoint / procurement_id (many2one)     : DEL relation: procurement.order
+# nothing to do (except take care of xmlids)
+# 
+
 procurement  / mrp.property             / composition (selection)       : module is now 'mrp' ('procurement')
 procurement  / mrp.property             / description (text)            : module is now 'mrp' ('procurement')
 procurement  / mrp.property             / group_id (many2one)           : module is now 'mrp' ('procurement')
 procurement  / mrp.property             / name (char)                   : module is now 'mrp' ('procurement')
 procurement  / mrp.property.group       / description (text)            : module is now 'mrp' ('procurement')
 procurement  / mrp.property.group       / name (char)                   : module is now 'mrp' ('procurement')
+# nothing to do (except take care of xmlids)
+# 
+
 procurement  / procurement.group        / move_type (selection)         : NEW required: required, selection_keys: ['direct', 'one'], req_default: function
 procurement  / procurement.group        / name (char)                   : NEW required: required, req_default: function
 procurement  / procurement.group        / procurement_ids (one2many)    : NEW relation: procurement.order
+# nothing to do
+
 procurement  / procurement.order        / close_move (boolean)          : DEL 
 procurement  / procurement.order        / date_close (datetime)         : DEL 
 procurement  / procurement.order        / group_id (many2one)           : NEW relation: procurement.group
@@ -19,6 +40,7 @@ procurement  / procurement.order        / note (text)                   : DEL
 procurement  / procurement.order        / procure_method (selection)    : DEL required: required, selection_keys: ['make_to_order', 'make_to_stock'], req_default: make_to_order
 procurement  / procurement.order        / rule_id (many2one)            : NEW relation: procurement.rule
 procurement  / procurement.order        / state (selection)             : selection_keys is now '['cancel', 'confirmed', 'done', 'exception', 'running']' ('['cancel', 'confirmed', 'done', 'draft', 'exception', 'ready', 'running', 'waiting']')
+
 procurement  / procurement.rule         / action (selection)            : NEW required: required, selection_keys: function
 procurement  / procurement.rule         / active (boolean)              : NEW 
 procurement  / procurement.rule         / company_id (many2one)         : NEW relation: res.company
@@ -26,26 +48,27 @@ procurement  / procurement.rule         / group_id (many2one)           : NEW re
 procurement  / procurement.rule         / group_propagation_option (selection): NEW selection_keys: ['fixed', 'none', 'propagate']
 procurement  / procurement.rule         / name (char)                   : NEW required: required
 procurement  / procurement.rule         / sequence (integer)            : NEW 
+
 procurement  / product.product          / orderpoint_ids (one2many)     : module is now 'stock' ('procurement')
+
 procurement  / product.template         / procure_method (selection)    : DEL required: required, selection_keys: ['make_to_order', 'make_to_stock'], req_default: make_to_stock
 procurement  / product.template         / supply_method (selection)     : DEL required: required, selection_keys: ['buy', 'produce'], req_default: buy
 procurement  / product.template         / type (False)                  : module is now 'stock' ('procurement')
+
 procurement  / res.company              / schedule_range (float)        : DEL required: required, req_default: 730.0
+
 procurement  / stock.move               / procurements (one2many)       : DEL relation: procurement.order
-procurement  / stock.warehouse.orderpoint / active (boolean)              : module is now 'stock' ('procurement')
-procurement  / stock.warehouse.orderpoint / company_id (many2one)         : module is now 'stock' ('procurement')
-procurement  / stock.warehouse.orderpoint / location_id (many2one)        : module is now 'stock' ('procurement')
-procurement  / stock.warehouse.orderpoint / logic (selection)             : module is now 'stock' ('procurement')
-procurement  / stock.warehouse.orderpoint / name (char)                   : module is now 'stock' ('procurement')
-procurement  / stock.warehouse.orderpoint / procurement_id (many2one)     : DEL relation: procurement.order
-procurement  / stock.warehouse.orderpoint / product_id (many2one)         : module is now 'stock' ('procurement')
-procurement  / stock.warehouse.orderpoint / product_max_qty (float)       : module is now 'stock' ('procurement')
-procurement  / stock.warehouse.orderpoint / product_min_qty (float)       : module is now 'stock' ('procurement')
-procurement  / stock.warehouse.orderpoint / product_uom (many2one)        : module is now 'stock' ('procurement')
-procurement  / stock.warehouse.orderpoint / product_uom (many2one)        : now a function
-procurement  / stock.warehouse.orderpoint / qty_multiple (integer)        : module is now 'stock' ('procurement')
-procurement  / stock.warehouse.orderpoint / warehouse_id (many2one)       : module is now 'stock' ('procurement')
+
 ---XML records in module 'procurement'---
+DEL ir.model.access: procurement.access_stock_warehouse_orderpoint
+DEL ir.model.access: procurement.access_stock_warehouse_orderpoint_system
+DEL ir.rule: procurement.stock_warehouse_orderpoint_rule
+# rename xmlids: moved to stock
+
+DEL ir.model.access: procurement.access_mrp_property
+DEL ir.model.access: procurement.access_mrp_property_group
+# rename xmlids: moved to mrp
+
 NEW ir.actions.act_window: procurement.do_view_procurements
 DEL ir.actions.act_window: procurement.act_make_procurement
 DEL ir.actions.act_window: procurement.act_procurement_2_stock_warehouse_orderpoint
@@ -56,13 +79,10 @@ DEL ir.actions.act_window: procurement.procurement_action_board
 DEL ir.actions.act_window: procurement.product_open_orderpoint
 NEW ir.model.access: procurement.access_procurement_group
 NEW ir.model.access: procurement.access_procurement_rule
-DEL ir.model.access: procurement.access_mrp_property
-DEL ir.model.access: procurement.access_mrp_property_group
 DEL ir.model.access: procurement.access_procurement_stock_user
-DEL ir.model.access: procurement.access_stock_warehouse_orderpoint
-DEL ir.model.access: procurement.access_stock_warehouse_orderpoint_system
+
+
 NEW ir.rule: procurement.product_pulled_flow_comp_rule
-DEL ir.rule: procurement.stock_warehouse_orderpoint_rule
 NEW ir.sequence: procurement.sequence_proc_group
 DEL ir.sequence: procurement.sequence_mrp_op
 NEW ir.sequence.type: procurement.sequence_proc_group_type
